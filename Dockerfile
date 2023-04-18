@@ -12,7 +12,7 @@ RUN pip install cython pip install pycocotools
 RUN pip install requests-ntlm
 RUN pip install OmegaConf
 RUN pip install timm
-RUN pip install mmcv-full==1.7.0
+RUN pip install mmcv-full==1.7.1 -f https://download.openmmlab.com/mmcv/dist/cu111/torch1.8.1/index.html
 RUN conda install scipy==1.7.3
 RUN pip install imagecorruptions
 RUN pip install scikit-learn
