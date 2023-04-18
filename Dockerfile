@@ -4,7 +4,6 @@ RUN pip install tensorboard
 RUN pip install opencv-python
 RUN pip install numpy
 RUN pip install fairscale
-RUN pip install -U 'git+https://github.com/facebookresearch/fvcore'
 RUN pip install iopath
 RUN pip install tabulate
 RUN pip install termcolor
