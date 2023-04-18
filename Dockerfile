@@ -1,7 +1,6 @@
 FROM pytorch/pytorch:1.8.1-cuda10.2-cudnn7-devel
 RUN conda install -c fvcore -c iopath -c conda-forge fvcore
 RUN pip install tensorboard
-RUN apt-get update
 RUN pip install opencv-python-headless==4.5.3.56
 RUN pip install opencv-python
 RUN pip install numpy
