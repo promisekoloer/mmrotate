@@ -2,6 +2,7 @@ FROM pytorch/pytorch:1.8.1-cuda10.2-cudnn7-devel
 RUN conda install -c fvcore -c iopath -c conda-forge fvcore
 RUN pip install tensorboard
 RUN pip install opencv-python
+RUN apt-get update && apt-get install ffmpeg libsm6 libxext6  -y
 RUN pip install numpy
 RUN pip install fairscale
 RUN pip install iopath
