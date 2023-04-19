@@ -1,2 +1,2 @@
 # mmrotate
-pytorch1.8.1-py38-cuda11.1-cudnn8-ubuntu18.04
+pytorch1.6.0-py37-cuda10.1-cudnn8-ubuntu18.04
