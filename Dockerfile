@@ -22,10 +22,3 @@ RUN pip install e2cnn
 RUN pip install -U openmim
 RUN pip install mmcv-full -f https://download.openmmlab.com/mmcv/dist/cu102/torch1.8.1/index.html
 RUN mim install mmdet
-# Install MMRotate
-RUN conda clean --all
-RUN git clone https://github.com/open-mmlab/mmrotate.git /mmrotate
-WORKDIR /mmrotate
-ENV FORCE_CUDA="1"
-RUN pip install -r requirements/build.txt
-RUN pip install --no-cache-dir -e .
