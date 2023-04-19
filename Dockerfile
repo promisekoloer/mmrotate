@@ -1,7 +1,7 @@
 FROM pytorch/pytorch:1.8.1-cuda10.2-cudnn7-devel
 RUN conda install -c fvcore -c iopath -c conda-forge fvcore
 RUN pip install tensorboard
-RUN pip install opencv-python-headless==4.5.3.56
+RUN pip install opencv-python-headless==4.2.0.34
 RUN pip install opencv-python
 RUN pip install numpy
 RUN pip install fairscale
@@ -20,5 +20,5 @@ RUN pip install e2cnn
 
 # Install MMCV MMDetection
 RUN pip install -U openmim
-RUN pip install mmcv-full -f https://download.openmmlab.com/mmcv/dist/cu102/torch1.8.1/index.html
+RUN pip install mmcv-full==1.7.0 -f https://download.openmmlab.com/mmcv/dist/cu102/torch1.8.1/index.html
 RUN mim install mmdet
