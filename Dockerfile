@@ -3,6 +3,7 @@ RUN conda install -c fvcore -c iopath -c conda-forge fvcore
 RUN pip install tensorboard
 RUN pip install opencv-python-headless==4.2.0.34
 RUN pip install opencv-python
+pip install opencv-contrib-python==4.7.0.72
 RUN pip install numpy
 RUN pip install fairscale
 RUN pip install iopath
