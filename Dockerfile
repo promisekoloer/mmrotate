@@ -1,9 +1,14 @@
 FROM pytorch/pytorch:1.8.1-cuda10.2-cudnn7-devel
 RUN conda install -c fvcore -c iopath -c conda-forge fvcore
 RUN pip install tensorboard
+
+# To fix GPG key error when running apt-get update
+RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/3bf863cc.pub
+RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64/7fa2af80.pub
 RUN apt-get update && apt-get install -y ffmpeg libsm6 libxext6 git ninja-build libglib2.0-0 libsm6 libxrender-dev libxext6 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+    
 RUN pip install opencv-python==4.7.0.72
 RUN pip install numpy
 RUN pip install fairscale
