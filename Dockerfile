@@ -1,4 +1,4 @@
-FROM pytorch/pytorch:1.8.1-cuda10.2-cudnn7-devel
+FROM pytorch/pytorch:1.8.1-cuda11.1-cudnn8-devel
 RUN conda install -c fvcore -c iopath -c conda-forge fvcore
 RUN pip install tensorboard
 
