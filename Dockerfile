@@ -19,7 +19,7 @@ RUN pip install cython pip install pycocotools
 RUN pip install requests-ntlm
 RUN pip install OmegaConf
 RUN pip install timm
-RUN conda install scipy==1.7.3
+RUN conda install scipy
 RUN pip install imagecorruptions
 RUN pip install scikit-learn
 RUN pip install six
