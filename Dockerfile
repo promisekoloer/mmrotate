@@ -27,7 +27,7 @@ RUN pip install e2cnn
 
 # Install MMCV MMDetection
 RUN pip install -U openmim
-RUN mim install mmcv-full==2.0.1 -f https://download.openmmlab.com/mmcv/dist/cu102/torch1.8.1/index.html
+RUN mim install mmcv-full==2.0.0 -f https://download.openmmlab.com/mmcv/dist/cu111/torch1.8.1/index.html
 RUN mim install mmengine
 
 # Install MMRotate
