@@ -18,10 +18,9 @@ RUN apt-get update && apt-get install -y ffmpeg libsm6 libxext6 git ninja-build 
 
 # Install MMEngine and MMCV
 RUN pip install openmim && \
-    mim install "mmengine>=0.7.1"
+    mim install "mmengine>=0.7.1" "mmcv>=2.0.0rc4"
     
 # Install MMCV MMDetection
-RUN pip install mmcv-full -f https://download.openmmlab.com/mmcv/dist/cu101/torch1.6.0/index.html
 RUN pip install mmdet
 
 # Install MMRotate
