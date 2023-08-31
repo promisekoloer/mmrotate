@@ -16,12 +16,18 @@ RUN apt-get update && apt-get install -y ffmpeg libsm6 libxext6 git ninja-build 
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Install MMEngine and MMCV
+RUN pip install openmim && \
+    mim install "mmengine>=0.7.1"
+    
 # Install MMCV MMDetection
 RUN pip install mmcv-full -f https://download.openmmlab.com/mmcv/dist/cu101/torch1.6.0/index.html
 RUN pip install mmdet
+
 # Install MMRotate
 RUN conda clean --all
 RUN git clone https://github.com/open-mmlab/mmrotate.git /mmrotate
+
 WORKDIR /mmrotate
 ENV FORCE_CUDA="1"
 RUN pip install -r requirements/build.txt
