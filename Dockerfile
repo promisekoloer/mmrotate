@@ -2,7 +2,9 @@ ARG PYTORCH="1.8.1"
 ARG CUDA="11.1"
 ARG CUDNN="8"
 
-FROM pytorch/pytorch:${PYTORCH}-cuda${CUDA}-cudnn${CUDNN}-devel
+FROM pytorch/pytorch:1.8.1-cuda11.1-cudnn8-devel
+RUN conda install -c fvcore -c iopath -c conda-forge fvcore
+RUN pip install tensorboard
 
 ENV TORCH_CUDA_ARCH_LIST="6.0 6.1 7.0 7.5 8.0 8.6+PTX" \
     TORCH_NVCC_FLAGS="-Xfatbin -compress-all" \
