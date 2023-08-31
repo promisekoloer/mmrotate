@@ -1,53 +1,30 @@
 ARG PYTORCH="1.8.1"
 ARG CUDA="11.1"
 ARG CUDNN="8"
+
 FROM pytorch/pytorch:${PYTORCH}-cuda${CUDA}-cudnn${CUDNN}-devel
 
-ARG MMCV="1.4.5"
-ARG MMDET="2.22.0"
-ARG MMROTATE="0.3.0"
-ARG TORCHSERVE="0.2.0"
+ENV TORCH_CUDA_ARCH_LIST="6.0 6.1 7.0+PTX"
+ENV TORCH_NVCC_FLAGS="-Xfatbin -compress-all"
+ENV CMAKE_PREFIX_PATH="$(dirname $(which conda))/../"
 
-ENV PYTHONUNBUFFERED TRUE
+# To fix GPG key error when running apt-get update
+RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/3bf863cc.pub
+RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64/7fa2af80.pub
 
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
-    ca-certificates \
-    g++ \
-    openjdk-11-jre-headless \
-    # MMDet Requirements
-    ffmpeg libsm6 libxext6 git ninja-build libglib2.0-0 libsm6 libxrender-dev libxext6 \
+RUN apt-get update && apt-get install -y ffmpeg libsm6 libxext6 git ninja-build libglib2.0-0 libsm6 libxrender-dev libxext6 \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-ENV PATH="/opt/conda/bin:$PATH"
-RUN export FORCE_CUDA=1
+# Install openmim
+RUN pip install --no-cache-dir -U openmim
+# Install mmengine, mmcv, and mmdetection
+RUN mim install --no-cache-dir mmengine "mmcv>=2.0.0rc2" "mmdet>=3.0.0rc2"
+# Install MMRotate
+RUN conda clean --all -y
+RUN git clone https://github.com/open-mmlab/mmrotate.git -b 1.x /mmrotate
+WORKDIR /mmrotate
+ENV FORCE_CUDA="1"
+RUN pip install -r requirements/build.txt
+RUN pip install --no-cache-dir -e .
 
-# TORCHSEVER
-# torchserve>0.2.0 is compatible with pytorch>=1.8.1
-RUN pip install torchserv==${TORCHSERVE}} torch-model-archiver
-
-# MMLAB
-ARG PYTORCH
-ARG CUDA
-RUN ["/bin/bash", "-c", "pip install mmcv-full==${MMCV} -f https://download.openmmlab.com/mmcv/dist/cu${CUDA//./}/torch${PYTORCH}/index.html"]
-RUN pip install mmdet==${MMDET}
-RUN pip install mmrotate==${MMROTATE}
-
-RUN useradd -m model-server \
-    && mkdir -p /home/model-server/tmp
-
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-
-RUN chmod +x /usr/local/bin/entrypoint.sh \
-    && chown -R model-server /home/model-server
-
-COPY config.properties /home/model-server/config.properties
-RUN mkdir /home/model-server/model-store && chown -R model-server /home/model-server/model-store
-
-EXPOSE 8080 8081 8082
-
-USER model-server
-WORKDIR /home/model-server
-ENV TEMP=/home/model-server/tmp
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-CMD ["serve"]
