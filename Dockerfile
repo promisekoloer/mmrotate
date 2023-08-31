@@ -30,14 +30,12 @@ RUN apt-get update \
 # Install MMEngine and MMCV
 RUN pip install openmim && \
     mim install "mmengine>=0.7.1" "mmcv==2.0.0rc4"
-    
-# Install MMCV MMDetection
 RUN pip install mmdet
 
 # Install MMRotate
 RUN conda clean --all
 RUN git clone https://github.com/open-mmlab/mmrotate.git /mmrotate
-
 WORKDIR /mmrotate
+ENV FORCE_CUDA="1"
 RUN pip install -r requirements/build.txt
 RUN pip install --no-cache-dir -e .
