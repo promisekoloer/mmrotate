@@ -1,8 +1,13 @@
-ARG PYTORCH="1.8.1"
+ARG PYTORCH="1.9.0"
 ARG CUDA="11.1"
 ARG CUDNN="8"
 
-FROM pytorch/pytorch:1.8.1-cuda11.1-cudnn8-devel
+FROM pytorch/pytorch:${PYTORCH}-cuda${CUDA}-cudnn${CUDNN}-devel
+
+ENV TORCH_CUDA_ARCH_LIST="6.0 6.1 7.0 7.5 8.0 8.6+PTX" \
+    TORCH_NVCC_FLAGS="-Xfatbin -compress-all" \
+    CMAKE_PREFIX_PATH="$(dirname $(which conda))/../" \
+    FORCE_CUDA="1"
 
 # Avoid Public GPG key error
 # https://github.com/NVIDIA/nvidia-docker/issues/1631
@@ -24,18 +29,12 @@ RUN apt-get update \
 
 # Install MMEngine and MMCV
 RUN pip install openmim && \
-    mim install "mmengine>=0.7.1" "mmcv==2.0.0rc4"
+    mim install "mmengine>=0.7.1" "mmcv>=2.0.0rc4"
 
 # Install MMDetection
 RUN conda clean --all \
     && git clone https://github.com/open-mmlab/mmdetection.git /mmdetection \
     && cd /mmdetection \
     && pip install --no-cache-dir -e .
-    
-# Install MMRotate
-RUN conda clean --all
-RUN git clone https://github.com/open-mmlab/mmrotate.git /mmrotate
-WORKDIR /mmrotate
-ENV FORCE_CUDA="1"
-RUN pip install -r requirements/build.txt
-RUN pip install --no-cache-dir -e .
+
+WORKDIR /mmdetection
